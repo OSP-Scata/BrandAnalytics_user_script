@@ -52,10 +52,10 @@ function CalculateLoyalty (zEvent) {
     let neutral = 0;
     //подсчёт
     for (let i = 0; i < toneValues.length; i++) {
-        if (toneValues[i].querySelector('[value="1"]')) {
+        if (toneValues[i].querySelector('#ftone_1')) {
             positive = Array.from(toneValues[i].getElementsByClassName("filter_item-nums"))[0].innerHTML;
         }
-        else if (toneValues[i].querySelector('[value="-1"]')) {
+        else if (toneValues[i].querySelector('#ftone_-1')) {
             negative = Array.from(toneValues[i].getElementsByClassName("filter_item-nums"))[0].innerHTML;
         }
         else {
@@ -63,7 +63,7 @@ function CalculateLoyalty (zEvent) {
         }
     }
     let all = messValues[1].innerHTML;
-    positive = parseInt(positive.replace(/\s/g, ''));
+    positive = parseInt(positive);//.replace(/\s/g, ''));
     negative = parseInt(negative);
     neutral = parseInt(neutral);
     all = parseInt(all.replace(/\s/g, ''));
@@ -72,12 +72,12 @@ function CalculateLoyalty (zEvent) {
     let zNode = document.createElement ('p');
     zNode.innerHTML = "Лояльность: " + loyalty;
     document.getElementById ("myContainer").appendChild (zNode);
+    //console.log(positive, negative, neutral); //debug output
 }
 
 function CalculateTags (zEvent) {
     var filters = document.getElementsByClassName("filter_list")
     var arrFilters = Array.from(filters);
-    //console.log(arrFilters);
     var custom = arrFilters[1]; // пользовательские фильтры
     var tags = arrFilters[7]; // теги
 
@@ -86,13 +86,14 @@ function CalculateTags (zEvent) {
     let bannedSM = 0;
     let tagArr = [];
     for (let j = 0; j < custValues.length; j++) {
-        if (custValues[j].querySelector('[id="fcustom_7"]')) {
+        if (custValues[j].querySelector('#fcustom_7')) {
             bannedSM = Array.from(custValues[j].getElementsByClassName("filter_item-nums"))[0].innerHTML;
         }
     }
     for (var k = 0; k < tagValues.length; k++) {
         if (tagValues[k].textContent.includes("Не отвечаем")) {
-            tagArr.push(tagValues[k].innerText);
+            tagArr.push(tagValues[k].getElementsByClassName("active router-link-exact-active filters_link filter_item-name")[0].innerHTML, tagValues[k].getElementsByClassName("filter_item-nums")[0].innerHTML);
+            //console.log(tagArr); //debug
         }
     }
     let tagStr = tagArr.toString();
@@ -107,6 +108,7 @@ function CalculateTags (zEvent) {
     let zNode2 = document.createElement ('p');
     zNode2.innerHTML = "Всего не отвечаем: " + noAnswerSum + "<br>" + noAnswer + "<br>Fb/IG/Twi: " + bannedSM;
     document.getElementById ("myContainer2").appendChild (zNode2);
+    //console.log(tagArr); //debug
 }
 
 function CalculateLoyaltyFilter (zEvent) {
@@ -121,10 +123,10 @@ function CalculateLoyaltyFilter (zEvent) {
     let neutral = 0;
     //подсчёт
     for (let i = 0; i < toneValues.length; i++) {
-        if (toneValues[i].querySelector('[value="1"]')) {
+        if (toneValues[i].querySelector('#ftone_1')) {
             positive = Array.from(toneValues[i].getElementsByClassName("filter_item-nums"))[0].innerHTML;
         }
-        else if (toneValues[i].querySelector('[value="-1"]')) {
+        else if (toneValues[i].querySelector('#ftone_-1')) {
             negative = Array.from(toneValues[i].getElementsByClassName("filter_item-nums"))[0].innerHTML;
         }
         else {
@@ -132,7 +134,7 @@ function CalculateLoyaltyFilter (zEvent) {
         }
     }
     let all = messValues[1].innerHTML;
-    positive = parseInt(positive.replace(/\s/g, ''));
+    positive = parseInt(positive);
     negative = parseInt(negative);
     neutral = parseInt(neutral);
     all = parseInt(all.replace(/\s/g, ''));
