@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calculating Loyalty and Tags - BA PPS
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1
 // @description  Calculations inside BA theme
 // @author       Lemniscata
 // @match        https://brandanalytics.ru/report/12495931/*
@@ -63,7 +63,7 @@ function CalculateLoyalty (zEvent) {
         }
     }
     let all = messValues[1].innerHTML;
-    positive = parseInt(positive);//.replace(/\s/g, ''));
+    positive = parseInt(positive.replace(/\s/g, ''));
     negative = parseInt(negative);
     neutral = parseInt(neutral);
     all = parseInt(all.replace(/\s/g, ''));
@@ -134,7 +134,7 @@ function CalculateLoyaltyFilter (zEvent) {
         }
     }
     let all = messValues[1].innerHTML;
-    positive = parseInt(positive);
+    positive = parseInt(positive.replace(/\s/g, ''));
     negative = parseInt(negative);
     neutral = parseInt(neutral);
     all = parseInt(all.replace(/\s/g, ''));
