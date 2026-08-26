@@ -25,35 +25,38 @@
         },
         {
             name: 'Спам крипты / заработка (комбинации триггеров)',
-            regex: /(доход|заработок|выплат[аы]).{1,20}(гарант|без вложен|крипт)/gi,
+            regex: /(доход|заработок|выплат[аы]).{1,20}(гарант|без вложен|крипт|отзыв|задани)/gi,
             color: '#ffffcc'
         },
         {
             name: 'Более 4 эмодзи подряд (частый признак спама)',
-            regex: /[😀-🙏]{4,}/g,
+            regex: /[😀-🙏]{4,}/gu,
             color: '#ffcccc'
-        }
+        },
+        {
+            name: 'Спам заданий / опросов для заработка',
+            regex: /(выполнять|простые|)\s*(задания|опросы|отзывы|лайки).{1,50}(телефон|доступ в|от тебя нужно)/gi,
+            color: '#ffffcc'
+        },
     ];
 
     // стилизация постов
-    function processMentions() {
-        const mentions = document.querySelectorAll('.ba-mention__text, .mention-text, [class*="mention__text"]');
-
+        function processMentions() {
+        const mentions = document.querySelectorAll('[class*="text"], [class*="mention"], .ba-mention__text');
         mentions.forEach(mention => {
-            if (mention.dataset.processedByRegex) return;
+            if (mention.dataset.processedByRegex || mention.innerText.length < 20) return;
             const text = mention.innerText;
             let isMatched = false;
             for (let rule of regexRules) {
                 if (rule.regex.test(text)) {
-                    const postCard = mention.closest('.ba-mention, .mention-item, [class*="mention-card"]') || mention;
-                    
+                    const postCard = mention.closest('[class*="mention-card"], [class*="item"], .ba-mention, [data-id]') || mention;
                     postCard.style.backgroundColor = rule.color;
-                    postCard.style.borderLeft = '5px solid red';
+                    postCard.style.borderLeft = '6px solid #ff4d4d';
                     if (!postCard.querySelector('.regex-badge')) {
                         const badge = document.createElement('div');
                         badge.className = 'regex-badge';
-                        badge.innerText = `⚠️ RegEx: ${rule.name}`;
-                        badge.style = 'font-size: 11px; color: red; font-weight: bold; margin-bottom: 5px; padding: 2px 5px; background: #fff; display: inline-block; border-radius: 3px; border: 1px solid red;';
+                        badge.innerText = `⚠️ БОТ-ТРИГГЕР: ${rule.name}`;
+                        badge.style = 'font-size: 11px; color: #ff0000; font-weight: bold; margin: 5px; padding: 3px 6px; background: #fff; display: inline-block; border-radius: 4px; border: 1px solid #ff0000;';
                         postCard.insertBefore(badge, postCard.firstChild);
                     }
 
@@ -61,9 +64,12 @@
                     break;
                 }
             }
+
             mention.dataset.processedByRegex = 'true';
         });
     }
+
+
 
     // динамическое отслеживание
     const observer = new MutationObserver((mutations) => {
